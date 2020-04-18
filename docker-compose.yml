@@ -1,0 +1,71 @@
+version: "3.3"
+services:
+  reverse-proxy:
+    image: ${TRAEFIK_DOCKER_IMAGE}
+    restart: always
+    command:
+      - "--api.insecure=${TRAEFIK_API_INSECURE_ENABLED}"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedByDefault=false"
+      - "--entryPoints.web.address=:80"
+      - "--entryPoints.websecure.address=:443"
+      - "--certificatesResolvers.le.acme.tlsChallenge=true"
+      - "--certificatesResolvers.le.acme.email=${TRAEFIK_LETSENCRYPT_EMAIL}"
+      - "--certificatesResolvers.le.acme.httpChallenge=true"
+      - "--certificatesResolvers.le.acme.httpChallenge.entryPoint=web"
+      - "--certificatesResolvers.le.acme.storage=acme.json"
+    ports:
+      - 80:80
+      - 443:443
+      - 8080:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${BASE_DATA_LOCATION}/letsencrypt/acme.json:/acme.json
+    networks:
+      - web
+
+  nextcloud:
+    image: ${NEXTCLOUD_DOCKER_IMAGE}
+    restart: always
+    volumes:
+      - ${BASE_DATA_LOCATION}/nextcloud:/var/www/html
+    expose:
+        - "8080"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.nextcloud.rule=Host(`${NEXTCLOUD_URL}`)
+      - traefik.http.routers.nextcloud.tls=true
+      - traefik.http.routers.nextcloud.tls.certresolver=le
+      - traefik.http.routers.nextcloud.entrypoints=websecure
+      - traefik.http.middlewares.nextcloud-redirect-web-secure.redirectscheme.scheme=https
+      - traefik.http.routers.nextcloud-web.middlewares=nextcloud-redirect-web-secure
+      - traefik.http.routers.nextcloud-web.rule=Host(`${NEXTCLOUD_URL}`)
+      - traefik.http.routers.nextcloud-web.entrypoints=web
+    environment:
+      - MYSQL_DATABASE=${MARIADB_NEXTCLOUD_DATABASE}
+      - MYSQL_USER=${MARIADB_NEXTCLOUD_USER}
+      - MYSQL_PASSWORD=${MARIADB_NEXTCLOUD_PASSWORD}
+      - MYSQL_HOST=database
+    links:
+      - "database"
+    networks:
+      - web
+      - database
+  
+  database:
+    image: ${MARIADB_DOCKER_IMAGE}
+    restart: always
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    volumes:
+      - ${BASE_DATA_LOCATION}/database:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MARIADB_NEXTCLOUD_DATABASE}
+      - MYSQL_USER=${MARIADB_NEXTCLOUD_USER}
+      - MYSQL_PASSWORD=${MARIADB_NEXTCLOUD_PASSWORD}
+    networks:
+      - database
+
+networks:
+  web:
+  database:
