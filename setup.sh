@@ -1,8 +1,9 @@
+dos2unix .env
 export $(grep -v '^#' .env | xargs -d '\n')
 
 sudo apt update && apt upgrade -y;
 
-sudo apt install \
+sudo apt install -y \
     apt-transport-https \
     ca-certificates \
     curl \
@@ -17,9 +18,11 @@ sudo add-apt-repository \
    stable";
 
 sudo apt update;
-sudo apt-get install docker-ce docker-ce-cli containerd.io;
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io;
 
 
-mkdir -p /data/{database,letsencrypt,nextcloud}; 
-touch /data/letsencrypt/acme.json; 
+mkdir -p /data/{database,letsencrypt,nextcloud};
+touch /data/letsencrypt/acme.json;
 chmod 600 /data/letsencrypt/acme.json;
+
+docker-compose up -d
