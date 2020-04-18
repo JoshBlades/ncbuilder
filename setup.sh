@@ -1,6 +1,3 @@
-dos2unix .env
-export $(grep -v '^#' .env | xargs -d '\n')
-
 sudo apt update && apt upgrade -y;
 
 sudo apt install -y \
@@ -8,7 +5,12 @@ sudo apt install -y \
     ca-certificates \
     curl \
     gnupg-agent \
-    software-properties-common;
+    software-properties-common \
+    dos2unix;
+
+dos2unix .env
+
+export $(grep -v '^#' .env | xargs -d '\n')
 
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -;
 
@@ -18,7 +20,7 @@ sudo add-apt-repository \
    stable";
 
 sudo apt update;
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io;
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose;
 
 
 mkdir -p /data/{database,letsencrypt,nextcloud};
