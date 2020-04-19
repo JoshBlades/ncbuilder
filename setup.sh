@@ -22,9 +22,8 @@ sudo add-apt-repository \
 sudo apt update;
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose;
 
+mkdir -p $BASE_DATA_LOCATION/{database,letsencrypt,nextcloud};
+touch $BASE_DATA_LOCATION/letsencrypt/acme.json;
+chmod 600 $BASE_DATA_LOCATION/letsencrypt/acme.json;
 
-mkdir -p /data/{database,letsencrypt,nextcloud};
-touch /data/letsencrypt/acme.json;
-chmod 600 /data/letsencrypt/acme.json;
-
-docker-compose up -d
+docker-compose up -d;
