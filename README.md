@@ -2,7 +2,7 @@
 
 This is a simple script to help you get up and running with nextcloud in a docker container (docker compose). 
 
-![nextcloud](https://miro.medium.com/max/1200/0*42t6Jb41PrtBNAmL.png)
+![nextcloud](https://www.acadiana-computer.com/images/blog/Nextcloud_Owncloud_IMAP_Login_Authentication/nextcloud.png)
 
 ### Install 
 
@@ -55,5 +55,4 @@ sudo docker-compose down
 
 ## Video 
 
-[![Create Nextcloud instance]](https://youtu.be/a0k1zTaYT38 "Create Nextcloud instance with SSL! (TRAEFIK & LETS-ENCRYPT)")
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/a0k1zTaYT38" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
