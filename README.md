@@ -55,4 +55,4 @@ sudo docker-compose down
 
 ## Video 
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/a0k1zTaYT38" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[![Create Nextcloud instance with SSL! (TRAEFIK & LETS-ENCRYPT)](https://www.howtogeek.com/thumbcache/2/200/88ecd5e8cfc97f1c578ea389f5be2577/wp-content/uploads/2020/03/NextCloudLogo.png)](https://www.youtube.com/watch?v=a0k1zTaYT38&list=LLuWkKYWK58bZNkjTxgFi7Jg)
